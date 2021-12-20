@@ -1,26 +1,29 @@
+//GLM and GLAD libraries
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+//Header files that I have written
 #include "Shader.h"
 #include "Texture.h"
 #include "camera.h"
 #include "cube.h"
 
-//#define STB_IMAGE_IMPLEMENTATION
-//#include "stb_image.h"
-
+//Built in libs for C/C++
 #include <iostream>
 #include <stdio.h>
+
+#define MAX(a, b) ((a)>(b)?(a):(b))
+#define MIN(a, b) ((a)<(b)?(a):(b))
 
 #define WINDOW_WIDTH 1080
 #define WINDOW_HEIGHT 720
 
 float mixCoeff = 0.2f;
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(1.5f, 2.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -120.0f, -30.0f);
 float lastX = WINDOW_WIDTH / 2.0f;
 float lastY = WINDOW_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -28,6 +31,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f; //Time between current and last frame
 float lastFrame = 0.0f; //Time of last frame
 
+glm::vec3 coral(1.0f, 0.5f, 0.31f);
+
+bool glfwSetWindowCenter(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -51,6 +57,7 @@ int main(void)
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetWindowCenter(window);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -75,16 +82,27 @@ int main(void)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	unsigned int lightVAO;
+	glGenVertexArrays(1, &lightVAO);
+	
+	glBindVertexArray(lightVAO);
 
-	int width, height, nrChannels;
-	Texture2D texture1("textures/container.jpg", width, height, nrChannels);
-	Texture2D texture2("textures/awesomeface.png", width, height, nrChannels, GL_RGBA);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	//Texture setup for the cube
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
+	//int width, height, nrChannels;
+	//Texture2D texture1("textures/container.jpg", width, height, nrChannels);
+	//Texture2D texture2("textures/awesomeface.png", width, height, nrChannels, GL_RGBA);
 
 	ourShader.use();
-	ourShader.setInt("texture1", 0);
-	ourShader.setInt("texture2", 1);
+	//ourShader.setInt("texture1", 0);
+	//ourShader.setInt("texture2", 1);
 
 	glEnable(GL_DEPTH_TEST);
 	while (!glfwWindowShouldClose(window))
@@ -101,10 +119,10 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//bind texture
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture1.ID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2.ID);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, texture1.ID);
+		//glActiveTexture(GL_TEXTURE1);
+		//glBindTexture(GL_TEXTURE_2D, texture2.ID);
 
 		ourShader.use();
 
@@ -117,23 +135,24 @@ int main(void)
 		ourShader.setFloat("mixCoeff", mixCoeff);
 
 		glBindVertexArray(VAO);
-		for (size_t i = 0; i < 10; ++i)
-		{
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, cubePositions[i]);
-			if (i % 3 == 0)
-			{
-				float angle = (float)glfwGetTime();
-				model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
-			}
-			else 
-			{
-				float angle = 20.0f * i;
-				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			}
-			ourShader.setFloatMatrix4fv("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+		//for (size_t i = 0; i < 10; ++i)
+		//{
+		glm::mat4 model = glm::mat4(1.0f);
+
+			//model = glm::translate(model, cubePositions[i]);
+			//if (i % 3 == 0)
+			//{
+			//	float angle = (float)glfwGetTime();
+			//	model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			//}
+			//else 
+			//{
+			//	float angle = 20.0f * i;
+			//	model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			//}
+		ourShader.setFloatMatrix4fv("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//}
 		//swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -144,6 +163,80 @@ int main(void)
 
 	glfwTerminate();
 	return 0;
+}
+
+//Center window function taken from - https://github.com/glfw/glfw/issues/310
+bool glfwSetWindowCenter(GLFWwindow* window)
+{
+	if (!window)
+		return false;
+
+	int sx = 0, sy = 0;
+	int px = 0, py = 0;
+	int mx = 0, my = 0;
+	int monitor_count = 0;
+	int best_area = 0;
+	int final_x = 0, final_y = 0;
+
+	glfwGetWindowSize(window, &sx, &sy);
+	glfwGetWindowPos(window, &px, &py);
+
+	// Iterate throug all monitors
+	GLFWmonitor** m = glfwGetMonitors(&monitor_count);
+	if (!m)
+		return false;
+
+	for (int j = 0; j < monitor_count; ++j)
+	{
+
+		glfwGetMonitorPos(m[j], &mx, &my);
+		const GLFWvidmode* mode = glfwGetVideoMode(m[j]);
+		if (!mode)
+			continue;
+
+		// Get intersection of two rectangles - screen and window
+		int minX = MAX(mx, px);
+		int minY = MAX(my, py);
+
+		int maxX = MIN(mx + mode->width, px + sx);
+		int maxY = MIN(my + mode->height, py + sy);
+
+		// Calculate area of the intersection
+		int area = MAX(maxX - minX, 0) * MAX(maxY - minY, 0);
+
+		// If its bigger than actual (window covers more space on this monitor)
+		if (area > best_area)
+		{
+			// Calculate proper position in this monitor
+			final_x = mx + (mode->width - sx) / 2;
+			final_y = my + (mode->height - sy) / 2;
+
+			best_area = area;
+		}
+	}
+
+	// We found something
+	if (best_area)
+		glfwSetWindowPos(window, final_x, final_y);
+
+	// Something is wrong - current window has NOT any intersection with any monitors. Move it to the default one.
+	else
+	{
+		GLFWmonitor* primary = glfwGetPrimaryMonitor();
+		if (primary)
+		{
+			const GLFWvidmode* desktop = glfwGetVideoMode(primary);
+
+			if (desktop)
+				glfwSetWindowPos(window, (desktop->width - sx) / 2, (desktop->height - sy) / 2);
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+
+	return true;
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)

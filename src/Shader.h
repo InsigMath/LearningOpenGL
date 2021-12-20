@@ -39,21 +39,21 @@ struct Shader
 	{
 		glUniform4i(glGetUniformLocation(ID, name.c_str()), v0, v1, v2, v3);
 	}
-	void setIntPtr(const std::string& name, int count, int* value)
+	void setIntPtr(const std::string& name, int* value)
 	{
-		glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform1iv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
-	void setIntVec2Ptr(const std::string& name, int count, int* value)
+	void setIntVec2Ptr(const std::string& name, int* value)
 	{
-		glUniform2iv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform2iv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
-	void setIntVec3Ptr(const std::string& name, int count, int* value)
+	void setIntVec3Ptr(const std::string& name, int* value)
 	{
-		glUniform3iv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform3iv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
-	void setIntVec4Ptr(const std::string& name, int count, int* value)
+	void setIntVec4Ptr(const std::string& name, int* value)
 	{
-		glUniform4iv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform4iv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
 	void setUInt(const std::string& name, unsigned int value) const
 	{
@@ -71,21 +71,21 @@ struct Shader
 	{
 		glUniform4ui(glGetUniformLocation(ID, name.c_str()), v0, v1, v2, v3);
 	}
-	void setUIntPtr(const std::string& name, int count, unsigned int* value)
+	void setUIntPtr(const std::string& name, unsigned int* value)
 	{
-		glUniform1uiv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform1uiv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
-	void setUIntVec2Ptr(const std::string& name, int count, unsigned int* value)
+	void setUIntVec2Ptr(const std::string& name, unsigned int* value)
 	{
-		glUniform2uiv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform2uiv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
-	void setUIntVec3Ptr(const std::string& name, int count, unsigned int* value)
+	void setUIntVec3Ptr(const std::string& name, unsigned int* value)
 	{
-		glUniform3uiv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform3uiv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
-	void setUIntVec4Ptr(const std::string& name, int count, unsigned int* value)
+	void setUIntVec4Ptr(const std::string& name, unsigned int* value)
 	{
-		glUniform4uiv(glGetUniformLocation(ID, name.c_str()), count, value);
+		glUniform4uiv(glGetUniformLocation(ID, name.c_str()), 1, value);
 	}
 	void setFloat(const std::string& name, float value) const
 	{
