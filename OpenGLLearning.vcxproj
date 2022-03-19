@@ -118,11 +118,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,13 +146,30 @@
     <None Include=".gitignore" />
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="shaders\boxFragment.frag" />
+    <None Include="shaders\boxFragmentFullLighting.frag" />
+    <None Include="shaders\depth_testing.frag" />
+    <None Include="shaders\depth_testing.vert" />
+    <None Include="shaders\grass.frag" />
+    <None Include="shaders\grass.vert" />
+    <None Include="shaders\lightColourFragment.frag" />
+    <None Include="shaders\lightFragment.frag" />
     <None Include="shaders\fragmenTex.frag" />
     <None Include="shaders\fragmentMixTex.frag" />
+    <None Include="shaders\boxVertex.vert" />
+    <None Include="shaders\lightVertex.vert" />
+    <None Include="shaders\model_backpack.frag" />
+    <None Include="shaders\model_backpack.vert" />
+    <None Include="shaders\stencil_testing.frag" />
+    <None Include="shaders\stencil_testing.vert" />
+    <None Include="shaders\stencil_testing_outline.frag" />
     <None Include="shaders\vertexTex.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\camera.h" />
-    <ClInclude Include="src\cube.h" />
+    <ClInclude Include="src\shape_constants.h" />
+    <ClInclude Include="src\mesh.h" />
+    <ClInclude Include="src\model.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\Texture.h" />
